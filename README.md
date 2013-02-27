@@ -9,8 +9,8 @@ Check the [changelog](CHANGELOG.md) to know which Piwik Analytics APIs are suppo
 Two Visual Studio Solutions are provided :
 
   * [Piwik.Analytics.sln](Piwik.Analytics.sln) : Library project
-  * [Piwik.Analytics.Samples](Piwik.Analytics.Samples) : Console Samples project
+  * [Piwik.Analytics.Samples.sln](Piwik.Analytics.Samples.sln) : Console Samples project
 
 Check the Console Samples project for exhaustive example usages.
 
-## [License](LICENSE.md)
+# [License](LICENSE)
