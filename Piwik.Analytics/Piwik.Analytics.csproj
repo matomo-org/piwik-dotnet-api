@@ -44,6 +44,8 @@
     <Compile Include="Modules\Actions.cs" />
     <Compile Include="Modules\Referers.cs" />
     <Compile Include="Modules\VisitFrequency.cs" />
+    <Compile Include="Modules\VisitorInterest.cs" />
+    <Compile Include="Modules\VisitsSummary.cs" />
     <Compile Include="Parameters\ArrayParameter.cs" />
     <Compile Include="Date\AbsoluteRangeDate.cs" />
     <Compile Include="Parameters\RefererTypeParameter.cs" />
