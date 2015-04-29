@@ -27,7 +27,7 @@ namespace Piwik.Analytics.Modules
             return PLUGIN;
         }
 
-        public Hashtable get(int idSite, PiwikPeriod period, PiwikDate date, string segment = null, string columns = null)
+        public Hashtable Get(int idSite, PiwikPeriod period, PiwikDate date, string segment = null, string columns = null)
         {
             Parameter[] parameters = 
             {
@@ -57,6 +57,24 @@ namespace Piwik.Analytics.Modules
             }
             
             return sendRequest<ArrayList>("getVisits", new List<Parameter>(parameters));
+        }
+
+        public Object GetUniqueVisitors(int idSite, PiwikPeriod period, PiwikDate date, string segment = null)
+        {
+            Parameter[] parameters = 
+            {
+                new SimpleParameter("idSite", idSite),
+                new PeriodParameter("period", period),
+                new PiwikDateParameter("date", date),
+                new SimpleParameter("segment", segment),
+            };
+
+            if (PiwikPeriod.isMultipleDates(period, date))
+            {
+                return sendRequest<Hashtable>("getUniqueVisitors", new List<Parameter>(parameters));
+            }
+
+            return sendRequest<ArrayList>("getUniqueVisitors", new List<Parameter>(parameters));
         }
     }
 }
