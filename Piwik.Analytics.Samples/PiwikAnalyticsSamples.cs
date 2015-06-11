@@ -67,6 +67,11 @@ namespace Piwik.Analytics.Samples
 //                GetRefererType();
 //                GetRefererTypeFiltered();
 
+                // ****************************************
+                // SCHEDULED REPORTS MODULE - Doc/Test methods
+                // ****************************************
+//                AddReport();
+
             }
             catch (PiwikAPIException ex)
             {
@@ -708,7 +713,38 @@ namespace Piwik.Analytics.Samples
                 specificRefererTypeStats[Referers.NB_CONVERSIONS] + " " +
                 specificRefererTypeStats[Referers.REVENUE]
             );
+        }
 
+        private static int AddReport()
+        {
+            ScheduledReports scheduledReports = new ScheduledReports();
+            scheduledReports.setTokenAuth("XYZ");
+
+            System.Collections.Generic.List<ScheduledReports.Statistic> reports = new System.Collections.Generic.List<ScheduledReports.Statistic>();
+
+            reports.Add(ScheduledReports.Statistic.VisitsSummary_get);
+            reports.Add(ScheduledReports.Statistic.VisitTime_getByDayOfWeek);
+            reports.Add(ScheduledReports.Statistic.VisitTime_getVisitInformationPerLocalTime);
+            reports.Add(ScheduledReports.Statistic.Resolution_getResolution);
+            reports.Add(ScheduledReports.Statistic.UserLanguage_getLanguage);
+            reports.Add(ScheduledReports.Statistic.Actions_get);
+            reports.Add(ScheduledReports.Statistic.Actions_getDownloads);
+            reports.Add(ScheduledReports.Statistic.Actions_getEntryPageTitles);
+            reports.Add(ScheduledReports.Statistic.Actions_getPageUrls);
+            reports.Add(ScheduledReports.Statistic.Actions_getSiteSearchKeywords);
+            reports.Add(ScheduledReports.Statistic.Actions_getPageTitles);
+            reports.Add(ScheduledReports.Statistic.Referrers_getAll);
+            reports.Add(ScheduledReports.Statistic.Goals_get);
+            reports.Add(ScheduledReports.Statistic.VisitorInterest_getNumberOfVisitsPerPage);
+            reports.Add(ScheduledReports.Statistic.DevicesDetection_getBrowsers);
+
+            string[] recipients = 
+            {
+                "foobar@domain.tld",
+                "barfoo@domain.tld"
+            };
+
+            return scheduledReports.addReport(1, "My new report", PiwikPeriod.DAY, 9, ScheduledReports.ReportType.email, ScheduledReports.ReportFormat.pdf, reports, false, recipients);
         }
     }
 }
