@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <summary>Piwik Analytics API official .NET Client</summary>
+    <description>Piwik Analytics API official .NET Client. Check the changelog to know which Piwik Analytics APIs are supported</description>
+    <language>en-US</language>
+    <projectUrl>https://github.com/piwik/piwik-dotnet-api</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/piwik/piwik-dotnet-api/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.githubusercontent.com/piwik/piwik-dotnet-api/master/logo.png</iconUrl>
+    <tags>piwik analytics api</tags>
+  </metadata>
+</package>

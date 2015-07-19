@@ -1,11 +1,11 @@
-## 0.2 (July 7, 2015)
+## 0.2
 
 Building blocks and partial implementation of :  
   * [ScheduledReports](http://piwik.org/docs/analytics-api/reference/#ScheduledReports)  
   * [VisitorInterest](http://piwik.org/docs/analytics-api/reference/#VisitorInterest)
   * [VisitsSummary](http://piwik.org/docs/analytics-api/reference/#VisitsSummary)
 
-## 0.1 (February 27, 2013)
+## 0.1
 
 Building blocks and partial implementation of :
   * [Actions](http://piwik.org/docs/analytics-api/reference/#Actions)
