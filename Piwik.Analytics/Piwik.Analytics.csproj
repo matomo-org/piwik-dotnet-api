@@ -44,6 +44,7 @@
     <Compile Include="Modules\Actions.cs" />
     <Compile Include="Modules\Referers.cs" />
     <Compile Include="Modules\ScheduledReports.cs" />
+    <Compile Include="Modules\UsersManager.cs" />
     <Compile Include="Modules\VisitFrequency.cs" />
     <Compile Include="Modules\VisitorInterest.cs" />
     <Compile Include="Modules\VisitsSummary.cs" />

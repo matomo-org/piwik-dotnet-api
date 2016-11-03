@@ -72,6 +72,33 @@ namespace Piwik.Analytics.Samples
                 // ****************************************
 //                AddReport();
 
+                // ****************************************
+                // USERS MANAGER MODULE - Doc/Test methods
+                // ****************************************
+//                SetUserPreference();
+//                GetUserPreference();
+//                GetUsers();
+//                GetUsersLogin();
+//                GetUsersSitesFromAccess();
+//                GetUsersAccessFromSite();
+//                GetUsersWithSiteAccess();
+//                GetSitesAccessFromUser();
+//                GetUser();
+//                GetUserByEmail();
+//                AddUser();
+//                SetSuperUserAccess();
+//                HasSuperUserAccess();
+//                GetUsersHavingSuperUserAccess();
+//                UpdateUser();
+//                DeleteUser();
+//                UserExists();
+//                UserEmailExists();
+//                GetUserLoginFromUserEmail();
+//                SetUserAccess();
+//                GetTokenAuth();
+
+
+
             }
             catch (PiwikAPIException ex)
             {
@@ -745,6 +772,336 @@ namespace Piwik.Analytics.Samples
             };
 
             return scheduledReports.addReport(1, "My new report", PiwikPeriod.DAY, 9, ScheduledReports.ReportType.email, ScheduledReports.ReportFormat.pdf, reports, false, recipients);
+        }
+
+        private static void SetUserPreference()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.setUserPreference("foobar", "defaultReportDate", "today");
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("User preference successfully set.");
+        }
+
+        private static void GetUserPreference()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var preference = usersManager.getUserPreference("foobar", "defaultReportDate");
+            Console.WriteLine("preference: " + preference);
+        }
+
+        private static void GetUsers()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            String[] logins = 
+            {
+                "foobar",
+                "barfoo"
+            };
+
+            var users = usersManager.getUsers(logins);
+
+            Console.WriteLine("Found " + users.Count + " users." + Environment.NewLine);
+
+            foreach (Hashtable user in users)
+            {
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("Login:\t\t\t" + user["login"]);
+                Console.WriteLine("E-Mail:\t\t\t" + user["email"]);
+                Console.WriteLine("Alias:\t\t\t" + user["alias"]);
+                Console.WriteLine(String.Empty);
+                Console.WriteLine("Password Hash:\t\t" + user["password"]);
+                Console.WriteLine("Token Auth:\t\t" + user["token_auth"]);
+                Console.WriteLine(String.Empty);
+                Console.WriteLine("Date Registered:\t" + user["date_registered"]);
+                Console.WriteLine("Is Superuser?:\t\t" + ((int)user["superuser_access"] == 0 ? "No" : "Yes"));
+            }
+        }
+
+        private static void GetUsersLogin()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var userlogins = usersManager.getUsersLogin();
+
+            Console.WriteLine("Found " + userlogins.Count + " users." + Environment.NewLine);
+            foreach (string login in userlogins)
+            {
+                Console.WriteLine(login);
+            }
+        }
+
+        private static void GetUsersSitesFromAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var users = usersManager.getUsersSitesFromAccess(UsersManager.UserAccess.view);
+            if (users.ContainsKey("result") && users["result"].Equals("error"))
+            {
+                Console.WriteLine("Error! " + users["message"]);
+                return;
+            }
+
+            foreach (DictionaryEntry pair in users)
+            {
+                Console.WriteLine("------------------------------");
+                Console.WriteLine(pair.Key + ":");
+                foreach (int idSite in (ArrayList)pair.Value)
+                {
+                    Console.WriteLine(idSite);
+                }
+            }
+        }
+
+        private static void GetUsersAccessFromSite()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var accessList = usersManager.getUsersAccessFromSite(1);
+            foreach (Hashtable entries in accessList)
+            {
+                foreach (DictionaryEntry pair in entries)
+                {
+                    Console.WriteLine(pair.Key + ": " + pair.Value);
+                }
+            }            
+        }
+
+        private static void GetUsersWithSiteAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var users = usersManager.getUsersWithSiteAccess(6, UsersManager.UserAccess.admin);
+            foreach (Hashtable user in users)
+            {
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("Login:\t\t\t" + user["login"]);
+                Console.WriteLine("E-Mail:\t\t\t" + user["email"]);
+                Console.WriteLine("Alias:\t\t\t" + user["alias"]);
+                Console.WriteLine(String.Empty);
+                Console.WriteLine("Password Hash:\t\t" + user["password"]);
+                Console.WriteLine("Token Auth:\t\t" + user["token_auth"]);
+                Console.WriteLine(String.Empty);
+                Console.WriteLine("Date Registered:\t" + user["date_registered"]);
+                Console.WriteLine("Is Superuser?:\t\t" + ((int)user["superuser_access"] == 0 ? "No" : "Yes"));
+            }
+        }
+
+        private static void GetSitesAccessFromUser()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var accessList = usersManager.getSitesAccessFromUser("foobar");
+            foreach (Hashtable entries in accessList)
+            {
+                Console.WriteLine(entries["site"] + " | " + entries["access"]);
+            }
+        }
+
+        private static void GetUser()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var users = usersManager.getUser("foobar");
+
+            // When user not found PiwikAPIException is thrown.
+            // So we can assume the ArrayList always have an element.
+            Hashtable user = (Hashtable)users[0];
+            Console.WriteLine("Login:\t\t\t" + user["login"]);
+            Console.WriteLine("E-Mail:\t\t\t" + user["email"]);
+            Console.WriteLine("Alias:\t\t\t" + user["alias"]);
+            Console.WriteLine(String.Empty);
+            Console.WriteLine("Password Hash:\t\t" + user["password"]);
+            Console.WriteLine("Token Auth:\t\t" + user["token_auth"]);
+            Console.WriteLine(String.Empty);
+            Console.WriteLine("Date Registered:\t" + user["date_registered"]);
+            Console.WriteLine("Is Superuser?:\t\t" + ((int)user["superuser_access"] == 0 ? "No" : "Yes"));
+        }
+
+        private static void GetUserByEmail()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var users = usersManager.getUserByEmail("foobar@domain.tld");
+
+            // When user not found PiwikAPIException is thrown.
+            // So we can assume the ArrayList always have an element.
+            Hashtable user = (Hashtable)users[0];
+            Console.WriteLine("Login:\t\t\t" + user["login"]);
+            Console.WriteLine("E-Mail:\t\t\t" + user["email"]);
+            Console.WriteLine("Alias:\t\t\t" + user["alias"]);
+            Console.WriteLine(String.Empty);
+            Console.WriteLine("Password Hash:\t\t" + user["password"]);
+            Console.WriteLine("Token Auth:\t\t" + user["token_auth"]);
+            Console.WriteLine(String.Empty);
+            Console.WriteLine("Date Registered:\t" + user["date_registered"]);
+            Console.WriteLine("Is Superuser?:\t\t" + ((int)user["superuser_access"] == 0 ? "No" : "Yes"));
+        }
+
+        private static void AddUser()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.addUser("foobar", "mypassword", "foobar@domain.tld", "Foo Bar");
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("Brand New User successfully created.");
+        }
+
+        private static void SetSuperUserAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.setSuperUserAccess("foobar", true);
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("Succeeded");
+        }
+
+        private static void HasSuperUserAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.hasSuperUserAccess();
+            Console.WriteLine("Result: " + response);
+        }
+
+
+        private static void GetUsersHavingSuperUserAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var users = usersManager.getUsersHavingSuperUserAccess();
+
+            Console.WriteLine("Found " + users.Count + " users." + Environment.NewLine);
+
+            foreach (Hashtable user in users)
+            {
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("Login:\t" + user["login"]);
+                Console.WriteLine("E-Mail:\t" + user["email"]);
+            }
+        }
+
+        private static void UpdateUser()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.updateUser("foobar", null, null, "Mr. Foo");
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("User successfully updated.");
+        }
+
+        private static void DeleteUser()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.deleteUser("foobar");
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("User successfully deleted.");
+        }
+
+        private static void UserExists()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.userExists("foobar");
+            Console.WriteLine("Result: " + response);
+        }
+
+        private static void GetUserLoginFromUserEmail()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var userLogin = usersManager.getUserLoginFromUserEmail("foobar@domain.tld");
+            Console.WriteLine("User Login: " + userLogin);
+        }
+
+        private static void UserEmailExists()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var response = usersManager.userEmailExists("foobar@domain.tld");
+            Console.WriteLine("Result: " + response);
+        }
+
+        private static void SetUserAccess()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            int[] idSites =
+            {
+                3, 6, 7
+            };
+
+            var response = usersManager.setUserAccess("foobar", UsersManager.UserAccess.view, idSites);
+
+            if (!response["result"].Equals("success"))
+            {
+                Console.WriteLine("Error! " + response["message"]);
+                return;
+            }
+
+            Console.WriteLine("User access successfully saved");
+        }
+
+        private static void GetTokenAuth()
+        {
+            var usersManager = new UsersManager();
+            usersManager.setTokenAuth("XYZ");
+
+            var tokenAuth = usersManager.getTokenAuth("foobar", "0c94cfb751db3511092c959be705b97c");
+            Console.WriteLine("Token Auth: " + tokenAuth);
         }
     }
 }
