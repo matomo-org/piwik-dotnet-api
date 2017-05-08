@@ -4,7 +4,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-git stash
 git pull
 
 # bump vesion in AssemblyInfo.cs
@@ -20,4 +19,3 @@ git add Piwik.Analytics/Properties/AssemblyInfo.cs
 git commit -m "chore: bump version to $1"
 git tag -a $1 -m $1
 git push --follow-tags
-git stash apply
